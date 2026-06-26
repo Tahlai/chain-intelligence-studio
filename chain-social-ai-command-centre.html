@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chain Social — Chain Intelligence Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Open+Sans:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #faf5ec;
+            --card: #ffffff;
+            --card-hover: #f5ede2;
+            --border: #e4d9ce;
+            --border-light: #ede5dc;
+            --brown: #705d50;
+            --brown-light: #9a8070;
+            --brown-dark: #4a3d33;
+            --brown-bg: #705d5012;
+            --text-primary: #3d2e25;
+            --text-secondary: #705d50;
+            --text-muted: #b8a898;
+            --green: #2e7d52;
+            --green-bg: #2e7d5215;
+            --amber: #a87020;
+            --amber-bg: #a8702015;
+            --red: #b84030;
+            --red-bg: #b8403015;
+            --blue: #3a5fa0;
+            --blue-bg: #3a5fa015;
+        }
+
+        body {
+            font-family: 'Open Sans', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 28px 32px;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            padding-bottom: 22px;
+            border-bottom: 1px solid var(--border);
+        }
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        .logo-mark {
+            width: 40px; height: 40px;
+            background: var(--brown-bg);
+            border: 1px solid #705d5030;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; font-weight: 800; color: var(--brown);
+            letter-spacing: -0.04em;
+            font-family: 'Playfair Display', serif;
+        }
+        .header-text .brand {
+            font-size: 11px; font-weight: 700;
+            letter-spacing: 0.18em; text-transform: uppercase;
+            color: var(--brown); margin-bottom: 3px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .header-text .title {
+            font-size: 20px; font-weight: 700;
+            color: var(--text-primary); letter-spacing: -0.025em;
+            font-family: 'Playfair Display', serif;
+        }
+        .divider-v { width: 1px; height: 38px; background: var(--border); }
+        .proto-badge {
+            padding: 4px 10px;
+            background: var(--brown-bg);
+            border: 1px solid #705d5028;
+            border-radius: 5px;
+            font-size: 10px; font-weight: 700;
+            color: var(--brown); letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .header-right { display: flex; align-items: center; gap: 18px; }
+        .system-status {
+            display: flex; align-items: center; gap: 8px;
+            padding: 7px 14px;
+            background: var(--green-bg);
+            border: 1px solid #2e7d5228;
+            border-radius: 20px;
+            font-size: 12px; font-weight: 600; color: var(--green);
+            font-family: 'Montserrat', sans-serif;
+        }
+        .pulse {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: var(--green);
+            animation: pulse-anim 2s infinite;
+        }
+        @keyframes pulse-anim {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.75); }
+        }
+        .clock-wrap { text-align: right; }
+        .clock { font-size: 19px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--text-primary); }
+        .clock-date { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+        /* ── KPI ROW ── */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+        .kpi-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px 22px;
+            position: relative;
+            overflow: hidden;
+        }
+        .kpi-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--brown) 0%, transparent 70%);
+        }
+        .kpi-label {
+            font-size: 10px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.12em;
+            color: var(--text-secondary); margin-bottom: 10px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .kpi-value {
+            font-size: 34px; font-weight: 800;
+            color: var(--text-primary); letter-spacing: -0.04em; line-height: 1;
+        }
+        .kpi-value sup { font-size: 15px; font-weight: 500; color: var(--text-secondary); }
+        .kpi-sub {
+            margin-top: 8px; font-size: 11px; font-weight: 500;
+        }
+        .kpi-sub.up { color: var(--green); }
+        .kpi-sub.warn { color: var(--amber); }
+
+        /* ── TWO-COL GRID ── */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        /* ── CARD ── */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 22px 24px;
+        }
+        .card-head {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 18px;
+        }
+        .card-title {
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.13em;
+            color: var(--text-secondary);
+            font-family: 'Montserrat', sans-serif;
+        }
+        .badge {
+            font-size: 10px; font-weight: 600;
+            padding: 3px 9px; border-radius: 10px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .badge-gold { background: var(--brown-bg); color: var(--brown); border: 1px solid #705d5028; }
+        .badge-green { background: var(--green-bg); color: var(--green); border: 1px solid #2e7d5228; }
+        .badge-blue { background: var(--blue-bg); color: var(--blue); border: 1px solid #3a5fa028; }
+
+        /* ── ROI TABLE ── */
+        .roi-table { width: 100%; border-collapse: collapse; }
+        .roi-table th {
+            font-size: 10px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.09em;
+            color: var(--text-muted); padding-bottom: 10px;
+            text-align: left; border-bottom: 1px solid var(--border);
+        }
+        .roi-table th.r { text-align: right; }
+        .roi-table td {
+            padding: 9px 0; font-size: 13px;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: middle;
+        }
+        .roi-table tr:last-child td { border-bottom: none; }
+        .wf-name { font-weight: 500; color: var(--text-primary); }
+        .wf-tag { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+        .num { color: var(--text-secondary); font-variant-numeric: tabular-nums; text-align: right; }
+        .save { color: var(--green); font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; }
+        .roi-footer {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 12px; margin-top: 16px; padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+        .roi-stat { text-align: center; }
+        .roi-stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 5px; }
+        .roi-stat-value { font-size: 20px; font-weight: 800; letter-spacing: -0.03em; }
+        .roi-stat-value.gold { color: var(--brown); }
+        .roi-stat-value.green { color: var(--green); }
+
+        /* ── AGENT BOARD ── */
+        .agent-list { display: flex; flex-direction: column; gap: 9px; }
+        .agent-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 11px 14px;
+            background: #faf5ec;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer; transition: background 0.12s, border-color 0.12s;
+        }
+        .agent-item:hover { background: #f0e8de; border-color: #d4c8bc; }
+        .agent-left { display: flex; align-items: center; gap: 12px; }
+        .dot {
+            width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+        }
+        .dot.running { background: var(--green); box-shadow: 0 0 5px #2e7d5260; animation: pulse-anim 2s infinite; }
+        .dot.idle { background: var(--text-muted); }
+        .dot.warning { background: var(--amber); box-shadow: 0 0 5px #a8702060; animation: pulse-anim 1.5s infinite; }
+        .agent-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+        .agent-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+        .agent-right { display: flex; align-items: center; gap: 10px; }
+        .agent-rate { font-size: 12px; font-weight: 700; }
+        .agent-rate.ok { color: var(--green); }
+        .agent-rate.warn { color: var(--amber); }
+        .pill {
+            font-size: 10px; font-weight: 700; padding: 3px 9px;
+            border-radius: 10px; text-transform: uppercase; letter-spacing: 0.06em;
+        }
+        .pill.running { background: var(--green-bg); color: var(--green); border: 1px solid #2e7d5228; }
+        .pill.idle { background: #ede5dc; color: var(--text-muted); border: 1px solid var(--border); }
+        .pill.warning { background: var(--amber-bg); color: var(--amber); border: 1px solid #a8702028; }
+        .alert-box {
+            margin-top: 14px; padding: 12px 14px;
+            background: var(--amber-bg); border: 1px solid #a8702022;
+            border-radius: 8px; display: flex; gap: 10px; align-items: flex-start;
+        }
+        .alert-icon { color: var(--amber); font-size: 14px; flex-shrink: 0; padding-top: 1px; }
+        .alert-title { font-size: 12px; font-weight: 700; color: var(--amber); margin-bottom: 3px; }
+        .alert-desc { font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
+
+        /* ── OPS FEED ── */
+        .feed-wrap {
+            position: relative;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .feed-wrap::-webkit-scrollbar { width: 3px; }
+        .feed-wrap::-webkit-scrollbar-track { background: transparent; }
+        .feed-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+        .feed-line {
+            position: absolute;
+            left: 15px; top: 6px; bottom: 6px; width: 1px;
+            background: linear-gradient(to bottom, var(--brown) 0%, #705d5018 100%);
+        }
+        .feed-item {
+            display: flex; align-items: flex-start; gap: 14px;
+            padding: 8px 0 8px 38px;
+            position: relative;
+        }
+        .feed-dot-outer {
+            position: absolute; left: 8px; top: 12px;
+            width: 15px; height: 15px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid var(--bg);
+        }
+        .feed-dot-outer.auto { background: var(--green); }
+        .feed-dot-outer.filter { background: var(--blue); }
+        .feed-dot-outer.human { background: var(--brown); }
+        .feed-time {
+            font-size: 11px; color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
+            min-width: 40px; flex-shrink: 0; padding-top: 1px;
+        }
+        .feed-body { flex: 1; }
+        .feed-title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .feed-title { font-size: 13px; font-weight: 500; color: var(--text-primary); line-height: 1.3; }
+        .feed-desc { font-size: 11px; color: var(--text-muted); margin-top: 3px; line-height: 1.4; }
+        .tag {
+            font-size: 10px; font-weight: 600;
+            padding: 2px 7px; border-radius: 4px; white-space: nowrap;
+        }
+        .tag-zap    { background: #c0440018; color: #a03800; border: 1px solid #c0440028; }
+        .tag-asana  { background: #c0400018; color: #9a3000; border: 1px solid #c0400028; }
+        .tag-slack  { background: #90103018; color: #7a0828; border: 1px solid #90103028; }
+        .tag-drive  { background: #2050a018; color: #1a4090; border: 1px solid #2050a028; }
+        .tag-klav   { background: #00805018; color: #006040; border: 1px solid #00805028; }
+        .tag-panda  { background: #00705018; color: #005040; border: 1px solid #00705028; }
+        .tag-type   { background: var(--brown-bg); color: var(--brown-dark); border: 1px solid #705d5028; }
+        .tag-human  { background: #40408018; color: #303070; border: 1px solid #40408028; }
+
+        /* ── CEO BRIEF ── */
+        .brief-box {
+            background: #f5ede2;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px 22px;
+            min-height: 130px;
+            font-size: 13.5px;
+            line-height: 1.85;
+            color: var(--text-primary);
+        }
+        .brief-placeholder { color: var(--text-muted); font-style: italic; }
+        .brief-section-head {
+            font-size: 10px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.12em;
+            color: var(--brown); margin-top: 14px; margin-bottom: 4px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .cursor {
+            display: inline-block; width: 2px; height: 15px;
+            background: var(--brown); margin-left: 1px;
+            animation: blink 0.9s infinite; vertical-align: middle;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .gen-btn {
+            padding: 8px 18px;
+            background: var(--brown);
+            color: #faf5ec;
+            border: none; border-radius: 6px;
+            font-size: 11px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            cursor: pointer; transition: background 0.12s, transform 0.1s;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .gen-btn:hover { background: var(--brown-dark); transform: translateY(-1px); }
+        .gen-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+        /* ── FOOTER ── */
+        .footer {
+            margin-top: 24px; padding-top: 18px;
+            border-top: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-note { font-size: 11px; color: var(--text-muted); }
+        .footer-stack { display: flex; gap: 8px; align-items: center; }
+        .stack-tag {
+            font-size: 10px; padding: 3px 8px; border-radius: 4px;
+            color: var(--text-muted); border: 1px solid var(--border-light);
+            background: var(--card);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<div class="header">
+    <div class="header-left">
+        <div class="logo-mark">CS</div>
+        <div class="header-text">
+            <div class="brand">Chain Social</div>
+            <div class="title">Chain Intelligence Studio</div>
+        </div>
+        <div class="divider-v"></div>
+        <div class="proto-badge">Prototype</div>
+    </div>
+    <div class="header-right">
+        <div class="system-status">
+            <div class="pulse"></div>
+            All Systems Operational
+        </div>
+        <div class="clock-wrap">
+            <div class="clock" id="clock">--:--:--</div>
+            <div class="clock-date" id="clock-date">--</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ KPI ROW ═══ -->
+<div class="kpi-row">
+    <div class="kpi-card">
+        <div class="kpi-label">AI Tasks Completed Today</div>
+        <div class="kpi-value" id="kpi-tasks">0</div>
+        <div class="kpi-sub up">↑ 12% vs yesterday</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Hours Saved This Week</div>
+        <div class="kpi-value"><span id="kpi-hours">0</span><sup> hrs</sup></div>
+        <div class="kpi-sub up">↑ 8% vs last week</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Active Automations</div>
+        <div class="kpi-value" id="kpi-autos">0</div>
+        <div class="kpi-sub warn">⚠ 1 requires attention</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">AI Confidence Score</div>
+        <div class="kpi-value"><span id="kpi-conf">0</span><sup>%</sup></div>
+        <div class="kpi-sub up">↑ Stable</div>
+    </div>
+</div>
+
+<!-- ═══ TWO-COL ═══ -->
+<div class="two-col">
+
+    <!-- ROI TABLE -->
+    <div class="card">
+        <div class="card-head">
+            <div class="card-title">Automation ROI</div>
+            <div class="badge badge-gold">Monthly View · $75/hr Blended Rate</div>
+        </div>
+        <table class="roi-table">
+            <thead>
+                <tr>
+                    <th>Workflow</th>
+                    <th class="r">Runs</th>
+                    <th class="r">Hrs Saved</th>
+                    <th class="r">$ Saved</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="wf-name">Digital Retainer Onboarding</div>
+                        <div class="wf-tag">PandaDoc → Slack → Asana → Klaviyo</div>
+                    </td>
+                    <td class="num">22</td>
+                    <td class="num">55 hrs</td>
+                    <td class="save">$4,125</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="wf-name">Weekly Client Reporting</div>
+                        <div class="wf-tag">Asana → Google Drive</div>
+                    </td>
+                    <td class="num">18</td>
+                    <td class="num">45 hrs</td>
+                    <td class="save">$3,375</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="wf-name">Typeform → Asana Briefing</div>
+                        <div class="wf-tag">Typeform → Asana (client projects)</div>
+                    </td>
+                    <td class="num">18</td>
+                    <td class="num">27 hrs</td>
+                    <td class="save">$2,025</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="wf-name">Welcome Email Sequence</div>
+                        <div class="wf-tag">Klaviyo · Dynamic AM signature</div>
+                    </td>
+                    <td class="num">22</td>
+                    <td class="num">22 hrs</td>
+                    <td class="save">$1,650</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="wf-name">Invoice Request Automation</div>
+                        <div class="wf-tag">Xero → Asana → Slack #invoicing</div>
+                    </td>
+                    <td class="num">28</td>
+                    <td class="num">14 hrs</td>
+                    <td class="save">$1,050</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="wf-name">Post-Discovery Call Flow</div>
+                        <div class="wf-tag">Calendly → Zapier Parser → Flodesk</div>
+                    </td>
+                    <td class="num">12</td>
+                    <td class="num">12 hrs</td>
+                    <td class="save">$900</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="roi-footer">
+            <div class="roi-stat">
+                <div class="roi-stat-label">Hours / Month</div>
+                <div class="roi-stat-value gold">175 hrs</div>
+            </div>
+            <div class="roi-stat">
+                <div class="roi-stat-label">Annual Saving</div>
+                <div class="roi-stat-value green">$157,500</div>
+            </div>
+            <div class="roi-stat">
+                <div class="roi-stat-label">ROI Multiple</div>
+                <div class="roi-stat-value gold">29×</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AGENT STATUS -->
+    <div class="card">
+        <div class="card-head">
+            <div class="card-title">AI Agent Status</div>
+            <div class="badge badge-gold">5 Agents</div>
+        </div>
+        <div class="agent-list">
+            <div class="agent-item">
+                <div class="agent-left">
+                    <div class="dot running"></div>
+                    <div>
+                        <div class="agent-name">Onboarding Agent</div>
+                        <div class="agent-meta">22 jobs today · PandaDoc → Asana → Slack</div>
+                    </div>
+                </div>
+                <div class="agent-right">
+                    <div class="agent-rate ok">99%</div>
+                    <div class="pill running">Running</div>
+                </div>
+            </div>
+            <div class="agent-item">
+                <div class="agent-left">
+                    <div class="dot running"></div>
+                    <div>
+                        <div class="agent-name">Reporting Agent</div>
+                        <div class="agent-meta">18 jobs today · Asana → Google Drive</div>
+                    </div>
+                </div>
+                <div class="agent-right">
+                    <div class="agent-rate ok">100%</div>
+                    <div class="pill running">Running</div>
+                </div>
+            </div>
+            <div class="agent-item">
+                <div class="agent-left">
+                    <div class="dot running"></div>
+                    <div>
+                        <div class="agent-name">Klaviyo Email Agent</div>
+                        <div class="agent-meta">22 jobs today · Welcome &amp; nurture flows</div>
+                    </div>
+                </div>
+                <div class="agent-right">
+                    <div class="agent-rate ok">98%</div>
+                    <div class="pill running">Running</div>
+                </div>
+            </div>
+            <div class="agent-item">
+                <div class="agent-left">
+                    <div class="dot warning"></div>
+                    <div>
+                        <div class="agent-name">Invoice Agent</div>
+                        <div class="agent-meta">3 jobs today · Xero → Asana → Slack</div>
+                    </div>
+                </div>
+                <div class="agent-right">
+                    <div class="agent-rate warn">78%</div>
+                    <div class="pill warning">Warning</div>
+                </div>
+            </div>
+            <div class="agent-item">
+                <div class="agent-left">
+                    <div class="dot idle"></div>
+                    <div>
+                        <div class="agent-name">Brief Writer Agent</div>
+                        <div class="agent-meta">0 jobs today · Awaiting trigger</div>
+                    </div>
+                </div>
+                <div class="agent-right">
+                    <div class="agent-rate ok">100%</div>
+                    <div class="pill idle">Idle</div>
+                </div>
+            </div>
+        </div>
+        <div class="alert-box">
+            <div class="alert-icon">⚠</div>
+            <div>
+                <div class="alert-title">Invoice Agent · 1 Failed Task</div>
+                <div class="alert-desc">Xero webhook timeout on INV-2847 · Dani notified via Slack · Manual review required before end of day</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ ONBOARDING OPERATIONS FEED ═══ -->
+<div class="card" style="margin-bottom: 14px;">
+    <div class="card-head">
+        <div class="card-title">Client Onboarding — Operations Feed</div>
+        <div style="display:flex; align-items:center; gap:10px;">
+            <div style="font-size:11px; color:var(--text-muted);">Most recent run · Nike Australia · Digital Retainer</div>
+            <div class="badge badge-green">Live</div>
+        </div>
+    </div>
+    <div class="feed-wrap">
+        <div class="feed-line"></div>
+
+        <div class="feed-item">
+            <div class="feed-dot-outer auto"></div>
+            <div class="feed-time">09:02</div>
+            <div class="feed-body">
+                <div class="feed-title-row">
+                    <span class="feed-title">PandaDoc contract signed — Nike Australia (Digital Retainer)</span>
+                    <span class="tag tag-panda">PandaDoc</span><span class="tag tag-zap">Zapier</span>
+                </div>
+                <div class="feed-desc">Trigger 1 fired · Automated workflow initiated across all platforms</div>
+            </div>
+        </div>
+
+        <div class="feed-item">
+            <div class="feed-dot-outer auto"></div>
+            <div class="feed-time">09:02</div>
+            <div class="feed-body">
+                <div class="feed-title-row">
+                    <span class="feed-title">Client added to #onboarding and #invoicing channels</span>
+                    <span class="tag tag-slack">Slack</span>
+                </div>
+                <div class="feed-desc">Team has immediate visibility from the moment the contract is signed</div>
+            </div>
+        </div>
+
+        <div class="feed-item">
+            <div class="feed-dot-outer auto"></div>
+            <div class="feed-time">09:03</div>
+            <div class="feed-body">
+                <div class="feed-title-row">
+                    <span class="feed-title">Signed contract uploaded to Google Drive</span>
+                    <span class="tag tag-drive">Drive</span>
+                </div>
+                <div class="feed-desc">Stored in /Clients/Nike Australia/Contracts/ · Single source of truth established</div>
+            </div>
+        </div>
+
+        <div class="feed-item">
+            <div class="feed-dot-outer filter"></div>
+            <div class="feed-time">09:03</div>
+            <div class="feed-body">
+                <div class="feed-title-row">
+                    <span class="feed-title">Filter passed — Digital Retainer confirmed ✓</span>
+                    <span class="tag tag-zap">Zapier Filter</span>
+                </div>
+                <div class="feed-desc">Service type verified from contract name · Workflow continues on correct path</div>
+            </div>
+        </div>
+
+        <div class="feed-item">
+            <div class="feed-dot-outer auto"></div>
+            <div class="feed-time">09:03</div>
+            <div class="feed-body">
+                <div class="feed-title-row">
+                    <span class="feed-title">Asana project created from Digital Retainer template</span>
+                    <span class="tag tag-asana">Asana</span>
+                </div>
+                <div class="feed-desc">Consistent project structure from day one · All default tasks and sections populated</div>
+            </div>
+        </div>
+
+        <div class="feed-item">
+            <div class="feed-dot-outer auto"></div>
+            <div class="feed-time">09:04</div>
+            <div class="feed-body">
+                <div class="feed-title-row">
+                    <span class="feed-title">Onboarding task created → assigned to Bonnie</span>
+                    <span class="tag tag-asana">Asana</span>
+                </div>
+                <div class="feed-desc">Adele added as collaborator · "Client Project Link" custom field auto-populated</div>
+            </div>
+        </div>
+
+        <div class="feed-item">
+            <div class="feed-dot-outer auto"></div>
+            <div class="feed-time">09:04</div>
+            <div class="feed-body">
+                <div class="feed-title-row">
+                    <span class="feed-title">Signed contract attached to onboarding task</span>
+                    <span class="tag tag-asana">Asana</span>
+                </div>
+                <div class="feed-desc">No manual document hunting · Contract accessible directly from the task</div>
+            </div>
+        </div>
+
+        <div class="feed-item">
+            <div class="feed-dot-outer auto"></div>
+            <div class="feed-time">09:04</div>
+            <div class="feed-body">
+                <div class="feed-title-row">
+                    <span class="feed-title">Invoice request subtask created → assigned to Dani</span>
+                    <span class="tag tag-asana">Asana</span>
+                </div>
+                <div class="feed-desc">Status set to "Invoice Requested" · Auto-added to Bookkeeping project via Asana Rule</div>
+            </div>
+        </div>
+
+        <div class="feed-item">
+            <div class="feed-dot-outer auto"></div>
+            <div class="feed-time">09:04</div>
+            <div class="feed-body">
+                <div class="feed-title-row">
+                    <span class="feed-title">Onboarding task linked to Pre-Onboarding section of client project</span>
+                    <span class="tag tag-asana">Asana</span>
+                </div>
+                <div class="feed-desc">Incoming AM has full context before the account is formally handed over</div>
+            </div>
+        </div>
+
+        <div class="feed-item">
+            <div class="feed-dot-outer human"></div>
+            <div class="feed-time">09:47</div>
+            <div class="feed-body">
+                <div class="feed-title-row">
+                    <span class="feed-title">AM/PL field updated by Bonnie → Sarah Mitchell assigned</span>
+                    <span class="tag tag-human">Human Action</span>
+                </div>
+                <div class="feed-desc">Bonnie's only required action · Trigger 2 fired · Handover sequence initiated</div>
+            </div>
+        </div>
+
+        <div class="feed-item">
+            <div class="feed-dot-outer auto"></div>
+            <div class="feed-time">09:47</div>
+            <div class="feed-body">
+                <div class="feed-title-row">
+                    <span class="feed-title">AM granted Project Admin access — Nike Australia Asana project</span>
+                    <span class="tag tag-asana">Asana Rule</span>
+                </div>
+                <div class="feed-desc">Automatically fired on AM/PL field update · No manual permission management required</div>
+            </div>
+        </div>
+
+        <div class="feed-item">
+            <div class="feed-dot-outer auto"></div>
+            <div class="feed-time">09:47</div>
+            <div class="feed-body">
+                <div class="feed-title-row">
+                    <span class="feed-title">Onboarding task reassigned from Bonnie → Sarah Mitchell</span>
+                    <span class="tag tag-asana">Asana Rule</span>
+                </div>
+                <div class="feed-desc">Formal handover complete · Full account ownership transferred to AM</div>
+            </div>
+        </div>
+
+        <div class="feed-item">
+            <div class="feed-dot-outer auto"></div>
+            <div class="feed-time">10:15</div>
+            <div class="feed-body">
+                <div class="feed-title-row">
+                    <span class="feed-title">First invoice paid → Slack notification sent to #onboarding-invoicing</span>
+                    <span class="tag tag-slack">Slack</span><span class="tag tag-zap">Zapier</span>
+                </div>
+                <div class="feed-desc">AM, HoD and Dani tagged · Invoice task in Asana marked complete</div>
+            </div>
+        </div>
+
+        <div class="feed-item">
+            <div class="feed-dot-outer auto"></div>
+            <div class="feed-time">10:16</div>
+            <div class="feed-body">
+                <div class="feed-title-row">
+                    <span class="feed-title">Client subscribed to Klaviyo "Welcome – New Clients" list</span>
+                    <span class="tag tag-klav">Klaviyo</span>
+                </div>
+                <div class="feed-desc">AM properties passed (name, email, project type) · Dynamic signature block activated</div>
+            </div>
+        </div>
+
+        <div class="feed-item">
+            <div class="feed-dot-outer auto"></div>
+            <div class="feed-time">10:16</div>
+            <div class="feed-body">
+                <div class="feed-title-row">
+                    <span class="feed-title">Welcome email sent with Sarah Mitchell's signature + Typeform onboarding link</span>
+                    <span class="tag tag-klav">Klaviyo</span>
+                </div>
+                <div class="feed-desc">Personalised AM introduction · Onboarding questionnaire link included with hidden client ID</div>
+            </div>
+        </div>
+
+        <div class="feed-item">
+            <div class="feed-dot-outer auto"></div>
+            <div class="feed-time">14:22</div>
+            <div class="feed-body">
+                <div class="feed-title-row">
+                    <span class="feed-title">Client completed Typeform onboarding questionnaire</span>
+                    <span class="tag tag-type">Typeform</span><span class="tag tag-asana">Asana</span>
+                </div>
+                <div class="feed-desc">All responses mapped to Asana tasks in client project · Onboarding complete · Zero manual entry</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ═══ CEO DAILY BRIEF ═══ -->
+<div class="card">
+    <div class="card-head">
+        <div class="card-title">Daily CEO Brief</div>
+        <button class="gen-btn" id="gen-btn" onclick="generateBrief()">Generate Brief</button>
+    </div>
+    <div class="brief-box" id="brief-box">
+        <span class="brief-placeholder">Click "Generate Brief" to generate today's AI-powered agency summary...</span>
+    </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="footer">
+    <div class="footer-note">Chain Social · Chain Intelligence Studio · Prototype build · Representative data only</div>
+    <div class="footer-stack">
+        <span class="stack-tag">Zapier</span>
+        <span class="stack-tag">Asana</span>
+        <span class="stack-tag">Klaviyo</span>
+        <span class="stack-tag">Slack</span>
+        <span class="stack-tag">PandaDoc</span>
+        <span class="stack-tag">Typeform</span>
+        <span class="stack-tag">Xero</span>
+        <span class="stack-tag">Google Drive</span>
+    </div>
+</div>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script>
+    // ── Live Clock ──
+    function tick() {
+        const now = new Date();
+        document.getElementById('clock').textContent =
+            now.toLocaleTimeString('en-AU', { hour12: false });
+        document.getElementById('clock-date').textContent =
+            now.toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    }
+    setInterval(tick, 1000);
+    tick();
+
+    // ── Animated Counters ──
+    function countUp(id, target, duration) {
+        const el = document.getElementById(id);
+        const start = performance.now();
+        function frame(now) {
+            const p = Math.min((now - start) / duration, 1);
+            const ease = 1 - Math.pow(1 - p, 3);
+            el.textContent = Math.round(ease * target);
+            if (p < 1) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+    }
+
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            countUp('kpi-tasks', 247, 1600);
+            countUp('kpi-hours', 44, 1400);
+            countUp('kpi-autos', 6, 800);
+            countUp('kpi-conf', 97, 1800);
+        }, 200);
+    });
+
+    // ── CEO Brief Typewriter ──
+    const briefLines = [
+        { type: 'head', text: "TODAY'S SNAPSHOT" },
+        { type: 'body', text: "247 automated tasks completed across 6 active workflows. The team has recovered 44 hours this week — equivalent to 1.1 full working days returned to delivery." },
+        { type: 'head', text: "ONBOARDING" },
+        { type: 'body', text: "3 new Digital Retainer clients onboarded since yesterday without manual intervention. PandaDoc → Slack → Asana → Klaviyo all fired successfully. Zero errors on the Onboarding Agent." },
+        { type: 'head', text: "ATTENTION REQUIRED" },
+        { type: 'body', text: "⚠ Invoice Agent running at 78% success rate. 1 failed task on INV-2847 — Xero webhook timeout. Dani has been notified via Slack. Manual review recommended before end of day." },
+        { type: 'head', text: "THIS WEEK'S EFFICIENCY WIN" },
+        { type: 'body', text: "Weekly Client Reporting automated 18 reports, saving 45 hours across the team. Reporting Agent ran at 100% with zero failures for the fifth consecutive week." },
+        { type: 'head', text: "SUGGESTED ACTIONS FOR TODAY" },
+        { type: 'body', text: "→ Investigate Invoice Agent webhook failure (Xero · INV-2847)\n→ Review and confirm AM assignment for Nike Australia onboarding\n→ Check Zapier task history for any failed runs in the last 24 hrs\n\nAI is handling the rest. Have a great day." },
+    ];
+
+    function generateBrief() {
+        const btn = document.getElementById('gen-btn');
+        const box = document.getElementById('brief-box');
+        btn.disabled = true;
+        btn.textContent = 'Generating...';
+        box.innerHTML = '';
+
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'long' });
+
+        // Build greeting
+        const greeting = document.createElement('div');
+        greeting.style.cssText = 'font-size:14px; font-weight:600; color:var(--brown); margin-bottom:12px; font-family: Playfair Display, serif;';
+        greeting.textContent = `Good morning — Chain Intelligence Studio · ${dateStr}`;
+        box.appendChild(greeting);
+
+        let lineIdx = 0;
+
+        function renderNextLine() {
+            if (lineIdx >= briefLines.length) {
+                btn.disabled = false;
+                btn.textContent = 'Regenerate';
+                return;
+            }
+            const line = briefLines[lineIdx++];
+            if (line.type === 'head') {
+                const el = document.createElement('div');
+                el.className = 'brief-section-head';
+                box.appendChild(el);
+                typeInto(el, line.text, 25, renderNextLine);
+            } else {
+                const el = document.createElement('div');
+                el.style.cssText = 'font-size:13px; line-height:1.8; color:var(--text-primary); margin-bottom:8px; white-space:pre-line;';
+                box.appendChild(el);
+
+                // Add cursor
+                const cur = document.createElement('span');
+                cur.className = 'cursor';
+                box.appendChild(cur);
+
+                typeInto(el, line.text, 14, () => {
+                    cur.remove();
+                    renderNextLine();
+                });
+            }
+        }
+
+        setTimeout(renderNextLine, 300);
+    }
+
+    function typeInto(el, text, speed, done) {
+        let i = 0;
+        function step() {
+            if (i < text.length) {
+                el.textContent += text[i++];
+                setTimeout(step, speed);
+            } else {
+                done();
+            }
+        }
+        step();
+    }
+</script>
+
+</body>
+</html>
